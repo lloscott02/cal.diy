@@ -2,6 +2,7 @@ import { logLevels } from "@/lib/logger";
 
 export type Environment = {
   NODE_ENV: "development" | "production";
+  PORT: string; // Railway sets this
   API_PORT: string;
   API_URL: string;
   DATABASE_READ_URL: string;

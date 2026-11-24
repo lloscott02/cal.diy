@@ -21,7 +21,7 @@ export class OutboxRepository {
     return db.outboxEvent.create({
       data: {
         type,
-        payload,
+        payload: payload as Prisma.InputJsonValue,
         nextAttemptAt: new Date(), // Ready for immediate delivery
         apiVersion: "1",
         entityVersion,

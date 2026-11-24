@@ -1,6 +1,6 @@
 import { Injectable, NestMiddleware } from "@nestjs/common";
 import { Request, Response, NextFunction } from "express";
-import * as rawBodyParser from "raw-body";
+import rawBodyParser from "raw-body";
 
 /**
  * RawBodyMiddleware - Captures raw request body for HMAC verification
@@ -28,12 +28,12 @@ export class RawBodyMiddleware implements NestMiddleware {
         encoding: "utf8",
       });
 
-      // Store raw body on request object
-      req.rawBody = raw.toString("utf8");
+      // Store raw body on request object (encoding: utf8 always returns string)
+      req.rawBody = raw as string;
 
       // Also parse as JSON and attach to req.body
       // (This mimics what body-parser would do)
-      if (req.headers["content-type"]?.includes("application/json")) {
+      if (req.headers["content-type"]?.includes("application/json") && req.rawBody) {
         try {
           req.body = JSON.parse(req.rawBody);
         } catch (e) {

@@ -43,7 +43,8 @@ export class OpsJwtGuard implements CanActivate {
 
       return true;
     } catch (error) {
-      throw new UnauthorizedException(`Invalid token: ${error.message}`);
+      const err = error as Error;
+      throw new UnauthorizedException(`Invalid token: ${err.message}`);
     }
   }
 

@@ -2,10 +2,14 @@ import { Injectable } from "@nestjs/common";
 import dayjs from "dayjs";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import { PrismaReadService } from "@/modules/prisma/prisma-read.service";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
 
 /**
  * CalZero: Availability Edit Guard
@@ -64,7 +68,7 @@ export class AvailabilityEditGuardService {
             startTime: booking.startTime,
             endTime: booking.endTime,
             type: this.getBookingType(booking),
-            athleteCount: booking._count.attendees + booking._count.seats,
+            athleteCount: booking._count.attendees + booking._count.seatsReferences,
           });
         }
       }
@@ -83,7 +87,7 @@ export class AvailabilityEditGuardService {
             startTime: booking.startTime,
             endTime: booking.endTime,
             type: this.getBookingType(booking),
-            athleteCount: booking._count.attendees + booking._count.seats,
+            athleteCount: booking._count.attendees + booking._count.seatsReferences,
           });
         }
       }

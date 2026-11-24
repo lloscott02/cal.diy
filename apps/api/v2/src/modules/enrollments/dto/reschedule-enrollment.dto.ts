@@ -15,8 +15,8 @@ export class RescheduleEnrollmentDto {
 }
 
 export class RescheduleResponseDto {
-  kind: "GROUP" | "PRIVATE";
-  oldStartTime: string;
-  newStartTime: string;
+  kind!: "GROUP" | "PRIVATE";
+  oldStartTime!: string;
+  newStartTime!: string;
   policyOutcome?: "full_refund" | "credit" | "no_refund";
 }

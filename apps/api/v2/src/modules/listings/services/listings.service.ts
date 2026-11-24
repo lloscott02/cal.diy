@@ -105,7 +105,7 @@ export class ListingsService {
       const availableSeats = series.hardCap - bookedSeats;
 
       // Only include if there are available seats
-      if (availableSeats > 0) {
+      if (availableSeats > 0 && occ.user) {
         listings.push({
           kind: "GROUP",
           occurrenceId: occ.id.toString(),

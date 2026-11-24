@@ -28,7 +28,8 @@ export class HoldExpiryJobService {
         this.logger.log(`Hold expiry job released ${releasedCount} expired holds`);
       }
     } catch (error) {
-      this.logger.error(`Hold expiry job failed: ${error.message}`, error.stack);
+      const err = error as Error;
+      this.logger.error(`Hold expiry job failed: ${err.message}`, err.stack);
     }
   }
 }

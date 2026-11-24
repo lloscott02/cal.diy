@@ -66,7 +66,15 @@ const seatedBookingMetadataSchema = z.object({}).catchall(z.string()).describe("
 
 type DatabaseUser = { id: number; name: string | null; email: string; username: string | null };
 
-type DatabaseBooking = Booking & {
+// CalZero fields that may not always be selected in queries
+type CalZeroBookingFields = 'seriesId' | 'publishState' | 'holidayBlocked' | 'needsCoverage' |
+  'overriddenFields' | 'athleteLabel' | 'timingTag' | 'trainerCaused' | 'policyOutcome' | 'version';
+
+// BookingSeat without CalZero-specific fields (athleteId, enrollmentType)
+type PartialBookingSeat = Omit<BookingSeat, 'athleteId' | 'enrollmentType'> &
+  Partial<Pick<BookingSeat, 'athleteId' | 'enrollmentType'>>;
+
+type DatabaseBooking = Omit<Booking, CalZeroBookingFields> & Partial<Pick<Booking, CalZeroBookingFields>> & {
   eventType: {
     id: number;
     slug: string;
@@ -79,7 +87,7 @@ type DatabaseBooking = Booking & {
     locale: string | null;
     phoneNumber?: string | null;
     noShow: boolean | null;
-    bookingSeat?: BookingSeat | null;
+    bookingSeat?: PartialBookingSeat | null;
   }[];
   user: DatabaseUser | null;
   createdAt: Date;

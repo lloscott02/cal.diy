@@ -48,7 +48,7 @@ export class OooOccurrenceService {
       include: {
         _count: {
           select: {
-            bookingSeat: true, // Count enrolled athletes
+            seatsReferences: true, // Count enrolled athletes
           },
         },
       },
@@ -57,7 +57,7 @@ export class OooOccurrenceService {
     this.logger.log(`Found ${occurrences.length} potential occurrences to flag`);
 
     // Step 2: Filter to occurrences with enrollments
-    const occurrencesWithEnrollments = occurrences.filter((occ) => occ._count.bookingSeat > 0);
+    const occurrencesWithEnrollments = occurrences.filter((occ) => occ._count.seatsReferences > 0);
 
     this.logger.log(
       `${occurrencesWithEnrollments.length} occurrences have enrollments and need coverage`
@@ -84,7 +84,7 @@ export class OooOccurrenceService {
             startTime: occurrence.startTime.toISOString(),
             endTime: occurrence.endTime.toISOString(),
             seriesId: occurrence.seriesId,
-            enrollmentCount: occurrence._count.bookingSeat,
+            enrollmentCount: occurrence._count.seatsReferences,
           });
 
           this.logger.log(`Emitted COVERAGE_NEEDED for published occurrence ${occurrence.uid}`);
@@ -158,7 +158,7 @@ export class OooOccurrenceService {
       include: {
         _count: {
           select: {
-            bookingSeat: true,
+            seatsReferences: true,
           },
         },
       },
@@ -174,7 +174,7 @@ export class OooOccurrenceService {
           startTime: occurrence.startTime.toISOString(),
           endTime: occurrence.endTime.toISOString(),
           seriesId: occurrence.seriesId,
-          enrollmentCount: occurrence._count.bookingSeat,
+          enrollmentCount: occurrence._count.seatsReferences,
         });
 
         eventsEmitted++;

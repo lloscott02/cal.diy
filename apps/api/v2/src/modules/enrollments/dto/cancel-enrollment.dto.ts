@@ -11,8 +11,8 @@ export class CancelEnrollmentDto {
 }
 
 export class CancelResponseDto {
-  kind: "GROUP" | "PRIVATE";
-  timingTag: "on_time" | "late";
-  trainerCaused: boolean;
-  policyOutcome: "full_refund" | "credit" | "no_refund";
+  kind!: "GROUP" | "PRIVATE";
+  timingTag!: "on_time" | "late";
+  trainerCaused!: boolean;
+  policyOutcome!: "full_refund" | "credit" | "no_refund";
 }

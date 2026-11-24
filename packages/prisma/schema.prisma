@@ -514,11 +514,11 @@ model User {
   autoOptInFeatures Boolean @default(false)
 
   // CalZero: Trainer mirror fields
-  opsUserId       String? @unique
-  status          String  @default("active")
-  calendarStatus  String  @default("not_connected")
-  timeBlocks      TimeBlock[]
-  groupSeries     GroupSeries[]
+  opsUserId      String?       @unique
+  status         String        @default("active")
+  calendarStatus String        @default("not_connected")
+  timeBlocks     TimeBlock[]
+  groupSeries    GroupSeries[]
 
   @@unique([email])
   @@unique([email, username])
@@ -927,18 +927,19 @@ model Booking {
   report                 BookingReport?
   wrongAssignmentReports WrongAssignmentReport[]
   // CalZero: Group session fields
-  seriesId               String?       // Links to GroupSeries for recurring classes
-  publishState           String        @default("internal") // internal | published | cancelled
-  holidayBlocked         Boolean       @default(false) // Blocked by facility closure
-  needsCoverage          Boolean       @default(false) // Trainer OOO, needs substitute
-  overriddenFields       Json?         // Fields overridden for this specific occurrence
-  athleteLabel           String?       // For Private sessions: athlete display name
+  groupSeries            GroupSeries?               @relation(fields: [seriesId], references: [id])
+  seriesId               String? // Links to GroupSeries for recurring classes
+  publishState           String                     @default("internal") // internal | published | cancelled
+  holidayBlocked         Boolean                    @default(false) // Blocked by facility closure
+  needsCoverage          Boolean                    @default(false) // Trainer OOO, needs substitute
+  overriddenFields       Json? // Fields overridden for this specific occurrence
+  athleteLabel           String? // For Private sessions: athlete display name
   // CalZero: Cancellation policy fields
-  timingTag              String?       // "on_time" | "late" - cancellation timing
-  trainerCaused          Boolean       @default(false) // True if trainer caused cancellation
-  policyOutcome          String?       // "full_refund" | "credit" | "no_refund"
+  timingTag              String? // "on_time" | "late" - cancellation timing
+  trainerCaused          Boolean                    @default(false) // True if trainer caused cancellation
+  policyOutcome          String? // "full_refund" | "credit" | "no_refund"
   // CalZero: Entity versioning for optimistic locking
-  version                Int           @default(1)
+  version                Int                        @default(1)
 
   // @@partial_index([reassignById])
 
@@ -1034,7 +1035,7 @@ model OutboxEvent {
   status        String    @default("pending") // pending | delivered | failed
   // Ground Zero webhook envelope fields
   apiVersion    String    @default("1")
-  entityVersion Int?      // Optional: entity version at time of event
+  entityVersion Int? // Optional: entity version at time of event
 
   @@index([status, nextAttemptAt])
   @@map("outbox_events")
@@ -1048,16 +1049,17 @@ model GroupSeries {
   eventType      EventType @relation(fields: [eventTypeId], references: [id], onDelete: Cascade)
   eventTypeId    Int
   name           String
-  weekday        Int       // 0=Sunday, 6=Saturday
-  localStartTime String    // HH:mm format in America/Chicago timezone
-  duration       Int       // minutes
-  softCap        Int       // Warning threshold
-  hardCap        Int       // Absolute max
+  weekday        Int // 0=Sunday, 6=Saturday
+  localStartTime String // HH:mm format in America/Chicago timezone
+  duration       Int // minutes
+  softCap        Int // Warning threshold
+  hardCap        Int // Absolute max
   startsOn       DateTime  @db.Date
   endsOn         DateTime? @db.Date
-  catalogItemId  String    // Ops catalog reference
+  catalogItemId  String // Ops catalog reference
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
+  occurrences    Booking[] // Back-reference to booking occurrences
 
   @@index([trainerId])
   @@index([startsOn, endsOn])
@@ -1067,8 +1069,8 @@ model GroupSeries {
 // CalZero: Membership tracking for recurring enrollment
 model SeriesEnrollment {
   id        String    @id @default(uuid())
-  athleteId String    // Ops athlete ID
-  seriesId  String    // Reference to GroupSeries
+  athleteId String // Ops athlete ID
+  seriesId  String // Reference to GroupSeries
   startsOn  DateTime  @db.Date
   endsOn    DateTime? @db.Date
   createdAt DateTime  @default(now())
@@ -1445,8 +1447,8 @@ model BookingSeat {
   data           Json?
   metadata       Json?
   // CalZero: Enrollment fields
-  athleteId      String?  // Ops system athlete identifier
-  enrollmentType String?  // "drop_in" | "membership"
+  athleteId      String? // Ops system athlete identifier
+  enrollmentType String? // "drop_in" | "membership"
 
   @@index([bookingId])
   @@index([attendeeId])
@@ -1783,7 +1785,7 @@ model OutOfOfficeEntry {
   updatedAt DateTime @updatedAt
 
   // CalZero: Entity versioning for optimistic locking
-  version   Int      @default(1)
+  version Int @default(1)
 
   @@index([uuid])
   @@index([userId])

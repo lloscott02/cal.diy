@@ -49,7 +49,8 @@ export class JwtService {
 
       return verified as OpsJwtPayload;
     } catch (error) {
-      throw new Error(`Ops JWT verification failed: ${error.message}`);
+      const err = error as Error;
+      throw new Error(`Ops JWT verification failed: ${err.message}`);
     }
   }
 }

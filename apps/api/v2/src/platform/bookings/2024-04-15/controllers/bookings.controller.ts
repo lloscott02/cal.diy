@@ -221,10 +221,11 @@ export class BookingsController_2024_04_15 {
           areCalendarEventsEnabled: bookingRequest.areCalendarEventsEnabled,
         },
       });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return {
         status: SUCCESS_STATUS,
         data: booking,
-      };
+      } as any;
     } catch (err) {
       this.handleBookingErrors(err);
     }
