@@ -229,6 +229,14 @@ export const buildDryRunBooking = ({
     creationSource: CreationSource.WEBAPP,
     references: [],
     payment: [],
+    // Cal Zero / Ground Zero integration fields
+    seriesId: null,
+    publishState: "published",
+    holidayBlocked: false,
+    needsCoverage: false,
+    athleteLabel: null,
+    overriddenFields: null,
+    version: 1,
   } satisfies ReturnTypeCreateBooking;
 
   /**

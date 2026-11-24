@@ -52,7 +52,7 @@ async function _buildPersonFromAttendee(
   attendee: Pick<Attendee, "locale" | "name" | "timeZone" | "email" | "phoneNumber"> & {
     bookingSeat: Pick<
       BookingSeat,
-      "id" | "referenceUid" | "bookingId" | "metadata" | "data" | "attendeeId"
+      "id" | "referenceUid" | "bookingId" | "metadata" | "data" | "attendeeId" | "athleteId" | "enrollmentType"
     > | null;
   }
 ) {

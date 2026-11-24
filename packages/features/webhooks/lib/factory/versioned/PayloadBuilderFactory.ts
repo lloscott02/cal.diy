@@ -91,6 +91,10 @@ const TRIGGER_TO_BUILDER_CATEGORY: Record<WebhookTriggerEvents, BuilderCategory>
 
   // Wrong assignment report events
   [WebhookTriggerEvents.WRONG_ASSIGNMENT_REPORT]: "booking",
+
+  // Ground Zero integration events (Cal Zero specific)
+  [WebhookTriggerEvents.COVERAGE_NEEDED]: "booking",
+  [WebhookTriggerEvents.SESSION_TRAINER_CHANGED]: "booking",
 };
 
 export type BookingTriggerEvents =
