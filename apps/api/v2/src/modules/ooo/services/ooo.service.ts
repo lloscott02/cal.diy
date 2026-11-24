@@ -5,6 +5,7 @@ import {
 } from "@/modules/ooo/inputs/ooo.input";
 import { UserOOORepository } from "@/modules/ooo/repositories/ooo.repository";
 import { UsersRepository } from "@/modules/users/users.repository";
+import { OutboxService } from "@/modules/outbox/services/outbox.service";
 import { BadRequestException, ConflictException, Injectable } from "@nestjs/common";
 
 import type { OutOfOfficeEntry } from "@calcom/prisma/client";
@@ -29,7 +30,8 @@ const OOO_REASON_TO_REASON_ID = {
 export class UserOOOService {
   constructor(
     private readonly oooRepository: UserOOORepository,
-    private readonly usersRepository: UsersRepository
+    private readonly usersRepository: UsersRepository,
+    private readonly outboxService: OutboxService
   ) {}
 
   formatOooReason(ooo: OutOfOfficeEntry) {
@@ -110,6 +112,17 @@ export class UserOOOService {
       userId,
       reasonId: OOO_REASON_TO_REASON_ID[reason ?? OutOfOfficeReason["UNSPECIFIED"]],
     });
+
+    // Emit OOO_CREATED event
+    await this.outboxService.createEvent("OOO_CREATED", {
+      oooId: ooo.id.toString(),
+      trainerId: userId.toString(),
+      start: ooo.start.toISOString(),
+      end: ooo.end.toISOString(),
+      reason: this.formatOooReason(ooo).reason,
+      createdAt: new Date().toISOString(),
+    });
+
     return this.formatOooReason(ooo);
   }
 
@@ -120,11 +133,32 @@ export class UserOOOService {
       ? { ...rest, reasonId: OOO_REASON_TO_REASON_ID[reason ?? OutOfOfficeReason["UNSPECIFIED"]] }
       : rest;
     const ooo = await this.oooRepository.updateUserOOO(oooId, data);
+
+    // Emit OOO_UPDATED event
+    await this.outboxService.createEvent("OOO_UPDATED", {
+      oooId: ooo.id.toString(),
+      trainerId: userId.toString(),
+      start: ooo.start.toISOString(),
+      end: ooo.end.toISOString(),
+      reason: this.formatOooReason(ooo).reason,
+      updatedAt: new Date().toISOString(),
+    });
+
     return this.formatOooReason(ooo);
   }
 
   async deleteUserOOO(oooId: number) {
     const ooo = await this.oooRepository.deleteUserOOO(oooId);
+
+    // Emit OOO_DELETED event
+    await this.outboxService.createEvent("OOO_DELETED", {
+      oooId: ooo.id.toString(),
+      trainerId: ooo.userId.toString(),
+      start: ooo.start.toISOString(),
+      end: ooo.end.toISOString(),
+      deletedAt: new Date().toISOString(),
+    });
+
     return this.formatOooReason(ooo);
   }
 
@@ -136,5 +170,9 @@ export class UserOOOService {
   ) {
     const ooos = await this.oooRepository.getUserOOOPaginated(userId, skip, take, sort);
     return ooos.map((ooo) => this.formatOooReason(ooo));
+  }
+
+  async getUserOOOById(oooId: number) {
+    return this.oooRepository.getUserOOOById(oooId);
   }
 }

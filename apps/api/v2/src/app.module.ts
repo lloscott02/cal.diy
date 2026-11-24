@@ -19,6 +19,7 @@ import { RequestIdMiddleware } from "@/middleware/request-ids/request-id.middlew
 import { AuthModule } from "@/modules/auth/auth.module";
 import { EndpointsModule } from "@/modules/endpoints.module";
 import { JwtModule } from "@/modules/jwt/jwt.module";
+import { GroundZeroExceptionFilter } from "@/modules/jwt/filters/ground-zero-exception.filter";
 import { PrismaModule } from "@/modules/prisma/prisma.module";
 import { RedisModule } from "@/modules/redis/redis.module";
 import { RedisService } from "@/modules/redis/redis.service";
@@ -67,6 +68,10 @@ import { VercelWebhookController } from "@/vercel-webhook.controller";
       useClass: SentryGlobalFilter,
     },
     {
+      provide: APP_FILTER,
+      useClass: GroundZeroExceptionFilter,
+    },
+    {
       provide: ThrottlerStorageRedisService,
       useFactory: (redisService: RedisService) => {
         return new ThrottlerStorageRedisService(redisService.redis);
@@ -99,6 +104,15 @@ export class AppModule implements NestModule {
         {
           path: "/v2/webhooks/vercel/deployment-promoted",
           method: RequestMethod.POST,
+        },
+        // Ground Zero HMAC-protected routes
+        {
+          path: "/v2/outbox/*path",
+          method: RequestMethod.ALL,
+        },
+        {
+          path: "/api/v2/outbox/*path",
+          method: RequestMethod.ALL,
         }
       )
       .apply(UrlencodedBodyMiddleware)

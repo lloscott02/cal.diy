@@ -492,4 +492,34 @@ export class UsersRepository {
 
     return updatedUser;
   }
+
+  /**
+   * CalZero: Upsert trainer mirror
+   *
+   * Creates or updates a User record to mirror a trainer from Ops.
+   * Uses opsUserId as the unique key.
+   */
+  async upsertTrainerMirror(data: {
+    opsUserId: string;
+    email: string;
+    timeZone: string;
+    status: string;
+  }) {
+    return this.dbWrite.prisma.user.upsert({
+      where: { opsUserId: data.opsUserId },
+      create: {
+        opsUserId: data.opsUserId,
+        email: data.email,
+        timeZone: data.timeZone,
+        status: data.status,
+        calendarStatus: "not_connected",
+        creationSource: CreationSource.API_V2,
+      },
+      update: {
+        email: data.email,
+        timeZone: data.timeZone,
+        status: data.status,
+      },
+    });
+  }
 }

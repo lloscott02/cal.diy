@@ -1,0 +1,33 @@
+# Cal Zero API v2 - Railway Configuration
+# https://docs.railway.app/reference/config-as-code
+
+[build]
+builder = "dockerfile"
+dockerfilePath = "./Dockerfile"
+# Build from repository root to access all workspaces
+watchPatterns = [
+    "apps/api/v2/**",
+    "packages/prisma/**",
+    "packages/platform-*/**"
+]
+
+[deploy]
+# Start command (optional, Dockerfile CMD is used by default)
+# startCommand = "node ./apps/api/v2/dist/apps/api/v2/src/main.js"
+
+# Health check configuration
+healthcheckPath = "/health"
+healthcheckTimeout = 30
+
+# Restart policy
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 5
+
+# Number of replicas (adjust as needed)
+numReplicas = 1
+
+# Railway automatically sets PORT env var
+# The app reads PORT in config/app.ts and binds to it
+
+[env]
+NODE_ENV = { value = "production" }

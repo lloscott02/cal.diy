@@ -43,6 +43,14 @@ export type Environment = {
   USE_POOL: string;
   VERCEL: string;
   ENABLE_ASYNC_TASKER: string;
+  // CalZero: Ops JWT public key for verifying Ops-issued tokens
+  OPS_JWT_PUBLIC_KEY: string;
+  // CalZero: Ops webhook endpoint for event delivery
+  OPS_WEBHOOK_URL: string;
+  // CalZero: Secret for signing outbox events sent to Ops
+  OPS_WEBHOOK_SECRET: string;
+  // CalZero: HMAC secret for verifying Ground Zero requests
+  GZERO_HMAC_SECRET: string;
 };
 
 export const getEnv = <K extends keyof Environment>(key: K, fallback?: Environment[K]): Environment[K] => {

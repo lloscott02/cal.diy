@@ -3,7 +3,8 @@ import type { AppConfig } from "./type";
 
 const loadConfig = (): AppConfig => {
   const env = getEnv("NODE_ENV", "development");
-  const apiPort = Number(getEnv("API_PORT", "5555"));
+  // Railway sets PORT, fallback to API_PORT for local dev
+  const apiPort = Number(getEnv("PORT", getEnv("API_PORT", "5555")));
   const apiUrl = getEnv("API_URL", "http://localhost");
   let portSuffix = "";
   if (process.env.API_PORT && env === "development") {

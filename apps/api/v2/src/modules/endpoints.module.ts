@@ -13,6 +13,15 @@ import { Module } from "@nestjs/common";
 
 import { UsersModule } from "./users/users.module";
 import { WebhooksModule } from "./webhooks/webhooks.module";
+import { SchedulesModule } from "./schedules/schedules.module";
+import { OutboxModule } from "./outbox/outbox.module";
+import { GroupsModule } from "./groups/groups.module";
+import { ListingsModule } from "./listings/listings.module";
+import { HoldsModule } from "./holds/holds.module";
+import { EnrollmentsModule } from "./enrollments/enrollments.module";
+import { BuildingModule } from "./building/building.module";
+import { OooModule } from "./ooo/ooo.module";
+import { CoverageModule } from "./coverage/coverage.module";
 
 @Module({
   imports: [
@@ -22,6 +31,15 @@ import { WebhooksModule } from "./webhooks/webhooks.module";
     TimezoneModule,
     UsersModule,
     WebhooksModule,
+    SchedulesModule, // CalZero: Schedule management
+    OutboxModule, // CalZero: Reliable event delivery to Ops
+    GroupsModule, // CalZero: Group session management
+    ListingsModule, // CalZero: Unified listings (Groups + Private openings)
+    HoldsModule, // CalZero: Hold and enrollment flow
+    EnrollmentsModule, // CalZero: Cancel and reschedule
+    BuildingModule, // CalZero: Building view and facility load
+    OooModule, // CalZero: Out of office management
+    CoverageModule, // CalZero: Coverage and reassignment
     DestinationCalendarsModule,
     AtomsModule,
     StripeModule,
