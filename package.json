@@ -59,7 +59,7 @@
     "lint:fix": "turbo lint:fix",
     "lint:report": "turbo lint:report",
     "lint": "turbo lint",
-    "postinstall": "node -e \"try { require('fs').statSync('.git'); require('child_process').execSync('husky install', {stdio:'inherit'}) } catch(e) {}\" && turbo run post-install",
+    "postinstall": "node -e \"if(process.env.NODE_ENV==='production'){process.exit(0)} try{require('fs').statSync('.git');require('child_process').execSync('husky install',{stdio:'inherit'})}catch(e){} require('child_process').execSync('turbo run post-install',{stdio:'inherit'})\"",
     "pre-commit": "lint-staged",
     "predev": "echo 'Checking env files'",
     "prisma": "yarn workspace @calcom/prisma prisma",
