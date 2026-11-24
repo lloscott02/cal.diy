@@ -1,5 +1,6 @@
 # Cal Zero API v2 - Railway Dockerfile
 # Multi-stage build for production deployment
+# Cache bust: 2024-11-24
 
 # =============================================================================
 # Stage 1: Build
@@ -8,6 +9,7 @@ FROM node:20-alpine AS build
 
 ARG DATABASE_DIRECT_URL
 ARG DATABASE_URL
+ARG CACHEBUST=1
 
 WORKDIR /calcom
 
