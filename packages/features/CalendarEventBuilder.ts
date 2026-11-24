@@ -58,13 +58,22 @@ async function _buildPersonFromAttendee(
 ) {
   const translate = await getTranslation(attendee.locale ?? "en", "common");
 
+  // Normalize bookingSeat to ensure athleteId and enrollmentType are null instead of undefined
+  const normalizedBookingSeat = attendee.bookingSeat
+    ? {
+        ...attendee.bookingSeat,
+        athleteId: attendee.bookingSeat.athleteId ?? null,
+        enrollmentType: attendee.bookingSeat.enrollmentType ?? null,
+      }
+    : null;
+
   return {
     name: attendee.name ?? "",
     email: attendee.email,
     timeZone: attendee.timeZone,
     language: { translate, locale: attendee.locale ?? "en" },
     phoneNumber: attendee.phoneNumber,
-    bookingSeat: attendee.bookingSeat,
+    bookingSeat: normalizedBookingSeat,
   } satisfies Person;
 }
 

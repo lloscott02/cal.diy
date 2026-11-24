@@ -239,7 +239,7 @@ export const buildDryRunBooking = ({
     version: 1,
     // Cancellation policy fields
     timingTag: null,
-    trainerCaused: null,
+    trainerCaused: false,
     policyOutcome: null,
   } satisfies ReturnTypeCreateBooking;
 
@@ -1837,6 +1837,14 @@ async function handler(
       });
     }
     throw err;
+  }
+
+  // Ensure booking was created - this should never happen but satisfies TypeScript
+  if (!booking) {
+    throw new HttpError({
+      statusCode: 500,
+      message: "Booking creation failed unexpectedly",
+    });
   }
 
   // After polling videoBusyTimes, credentials might have been changed due to refreshment, so query them again.
