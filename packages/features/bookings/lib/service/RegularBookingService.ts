@@ -237,6 +237,10 @@ export const buildDryRunBooking = ({
     athleteLabel: null,
     overriddenFields: null,
     version: 1,
+    // Cancellation policy fields
+    timingTag: null,
+    trainerCaused: null,
+    policyOutcome: null,
   } satisfies ReturnTypeCreateBooking;
 
   /**

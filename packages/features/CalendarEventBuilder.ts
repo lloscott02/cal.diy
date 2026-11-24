@@ -52,8 +52,8 @@ async function _buildPersonFromAttendee(
   attendee: Pick<Attendee, "locale" | "name" | "timeZone" | "email" | "phoneNumber"> & {
     bookingSeat: Pick<
       BookingSeat,
-      "id" | "referenceUid" | "bookingId" | "metadata" | "data" | "attendeeId" | "athleteId" | "enrollmentType"
-    > | null;
+      "id" | "referenceUid" | "bookingId" | "metadata" | "data" | "attendeeId"
+    > & Partial<Pick<BookingSeat, "athleteId" | "enrollmentType">> | null;
   }
 ) {
   const translate = await getTranslation(attendee.locale ?? "en", "common");
