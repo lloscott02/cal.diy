@@ -21,6 +21,7 @@ export {
   WebhookVersion,
 } from "@calcom/features/webhooks/lib/interface/IWebhookRepository";
 export type { IWebhookProducerService } from "@calcom/features/webhooks/lib/interface/WebhookProducerService";
+export { createWebhookSignature } from "@calcom/features/webhooks/lib/sendPayload";
 export {
   AttributeType,
   CreationSource,

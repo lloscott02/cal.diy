@@ -21,7 +21,7 @@ import { HoldsModule } from "./holds/holds.module";
 import { EnrollmentsModule } from "./enrollments/enrollments.module";
 import { BuildingModule } from "./building/building.module";
 import { OooModule } from "./ooo/ooo.module";
-import { CoverageModule } from "./coverage/coverage.module";
+import { CoverageModule } from "./trainer-coverage/coverage.module";
 
 @Module({
   imports: [
