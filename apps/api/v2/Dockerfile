@@ -1,6 +1,6 @@
 # Cal Zero API v2 - Railway Dockerfile
 # Multi-stage build for production deployment
-# Cache bust: 2024-11-24
+# Cache bust: 2026-11-24-v2
 
 # =============================================================================
 # Stage 1: Build
